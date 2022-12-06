@@ -6,14 +6,14 @@ const RPS_ABC: &[char] = &['A', 'B', 'C'];
 enum GAME {
     LOSS,
     DRAW,
-    WIN
+    WIN,
 }
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 enum HAND {
     ROCK,
     PAPER,
-    SCISSORS
+    SCISSORS,
 }
 
 fn idx_to_hand(i: usize) -> HAND {
@@ -21,7 +21,7 @@ fn idx_to_hand(i: usize) -> HAND {
         0 => HAND::ROCK,
         1 => HAND::PAPER,
         2 => HAND::SCISSORS,
-        _ => panic!("invalid hand idx")
+        _ => panic!("invalid hand idx"),
     }
 }
 
@@ -30,7 +30,7 @@ fn char_to_game(c: char) -> GAME {
         'X' => GAME::LOSS,
         'Y' => GAME::DRAW,
         'Z' => GAME::WIN,
-        _ => panic!("invalid hand char")
+        _ => panic!("invalid hand char"),
     }
 }
 
@@ -38,7 +38,15 @@ fn game(o: HAND, y: HAND) -> GAME {
     match (o, y) {
         (HAND::ROCK, HAND::SCISSORS) => GAME::LOSS,
         (HAND::SCISSORS, HAND::ROCK) => GAME::WIN,
-        _ => if o < y { GAME::WIN } else if o > y { GAME::LOSS } else { GAME::DRAW }
+        _ => {
+            if o < y {
+                GAME::WIN
+            } else if o > y {
+                GAME::LOSS
+            } else {
+                GAME::DRAW
+            }
+        }
     }
 }
 
@@ -46,14 +54,18 @@ fn find_my_hand(o: HAND, g: GAME) -> HAND {
     for i in 0..=2 {
         let h = idx_to_hand(i);
         if game(o, h) == g {
-            return h
+            return h;
         }
     }
     panic!("failed to find matching hand")
 }
 
 fn points(opponent: char, game_char: char) -> u32 {
-    let (oi, _) = RPS_ABC.iter().enumerate().find(|(_, x)| x.eq(&&opponent)).unwrap();
+    let (oi, _) = RPS_ABC
+        .iter()
+        .enumerate()
+        .find(|(_, x)| x.eq(&&opponent))
+        .unwrap();
     let o = idx_to_hand(oi);
     let g = char_to_game(game_char);
     let y = find_my_hand(o, g);
