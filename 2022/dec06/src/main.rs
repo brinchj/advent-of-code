@@ -14,7 +14,7 @@ fn main() {
         let cs: Vec<char> = line.chars().into_iter().collect();
         for i in 0..line.len() {
             if count_unique(cs[i..i + 14].iter()) == 14 {
-                println!("{}", i+14);
+                println!("{}", i + 14);
                 return;
             }
         }

@@ -24,14 +24,12 @@ fn build_range(fromto: &str) -> Range {
 fn main() {
     let mut count = 0;
 
-    for line_res in stdin().lines() {
-        if let Ok(line) = line_res {
-            let pair: Vec<&str> = line.split(',').collect();
-            let left = build_range(pair[0]);
-            let right = build_range(pair[1]);
-            if left.has_overlap(&right) {
-                count += 1;
-            }
+    for line in stdin().lines().flatten() {
+        let pair: Vec<&str> = line.split(',').collect();
+        let left = build_range(pair[0]);
+        let right = build_range(pair[1]);
+        if left.has_overlap(&right) {
+            count += 1;
         }
     }
 

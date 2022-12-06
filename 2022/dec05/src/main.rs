@@ -24,11 +24,11 @@ impl Row {
             current = Self::get(&mut cs);
         }
 
-        return if out.is_empty() {
+        if out.is_empty() {
             None
         } else {
             Some(Row { crates: out })
-        };
+        }
     }
 }
 
@@ -82,31 +82,27 @@ impl CommandMove {
                 _ => return None,
             }
         }
-        return None;
+        None
     }
 }
 
 fn main() {
     let mut rows = vec![];
-    for lines_res in stdin().lines() {
-        if let Ok(line) = lines_res {
-            if let Some(row) = Row::from_str(line.as_str()) {
-                rows.push(row)
-            } else {
-                break;
-            }
+    for line in stdin().lines().flatten() {
+        if let Some(row) = Row::from_str(line.as_str()) {
+            rows.push(row)
+        } else {
+            break;
         }
     }
 
     let mut stacks = Stacks::from_rows(rows);
 
-    for lines_res in stdin().lines() {
-        if let Ok(line) = lines_res {
-            if let Some(cmd) = CommandMove::from_str(&line) {
-                let l = stacks.stacks[cmd.from - 1].len();
-                let moved: Vec<char> = stacks.stacks[cmd.from - 1].drain(l - cmd.count..).collect();
-                stacks.stacks[cmd.to - 1].extend(moved);
-            }
+    for line in stdin().lines().flatten() {
+        if let Some(cmd) = CommandMove::from_str(&line) {
+            let l = stacks.stacks[cmd.from - 1].len();
+            let moved: Vec<char> = stacks.stacks[cmd.from - 1].drain(l - cmd.count..).collect();
+            stacks.stacks[cmd.to - 1].extend(moved);
         }
     }
 

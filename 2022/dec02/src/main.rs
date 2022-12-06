@@ -80,12 +80,10 @@ fn points(opponent: char, game_char: char) -> u32 {
 fn main() {
     let mut sum = 0;
 
-    for line_res in stdin().lines() {
-        if let Ok(line) = line_res {
-            if let Some(o) = line.chars().next() {
-                let y = line.chars().last().unwrap();
-                sum += points(o, y);
-            }
+    for line in stdin().lines().flatten() {
+        if let Some(o) = line.chars().next() {
+            let y = line.chars().last().unwrap();
+            sum += points(o, y);
         }
     }
 
